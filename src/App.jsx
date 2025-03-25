@@ -26,7 +26,7 @@ const App = (props) => {
           headers: headers
         }
       ).then((response) => {
-        setDecodedResults(response.statusText);
+        setDecodedResults(response.data);
         console.log(response);
       })
         .catch((error) => {
