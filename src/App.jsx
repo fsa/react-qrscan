@@ -20,8 +20,8 @@ const App = (props) => {
           disableFlip={false}
           qrCodeSuccessCallback={onNewScanResult}
         />
-        <p>{decodedResults}</p>
       </section>
+      <p>{decodedResults}</p>
     </div>
   );
 };
