@@ -16,12 +16,12 @@ const App = (props) => {
     if (url && token) {
       axios.post(url,
         decodedResult,
-        {
+        /*{
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token,
           }
-        }
+        }*/
       ).then((response) => {
         setDecodedResults(response.data);
         console.log(response);
