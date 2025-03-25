@@ -23,11 +23,11 @@ const App = (props) => {
           }
         }
       ).then((response) => {
-        setDecodedResults(response.data.stringlify());
+        setDecodedResults(response.data);
         console.log(response);
       });
     } else {
-      setDecodedResults(decodedText);
+      setDecodedResults(decodedResult);
     }
   };
 
