@@ -3,12 +3,32 @@
 import React, { useState } from 'react';
 import './App.css';
 import Html5QrcodePlugin from './Html5QrcodePlugin.jsx';
+import axios from 'axios';
 
 const App = (props) => {
+  const queryParams = new URLSearchParams(window.location.search);
+  const token = queryParams.get("token");
+  const url = queryParams.get("url");
+  console.log(token, url)
   const [decodedResults, setDecodedResults] = useState([]);
   const onNewScanResult = (decodedText, decodedResult) => {
     console.log("App [result]", decodedResult);
-    setDecodedResults(decodedText);
+    if (url && token) {
+      axios.post(url,
+        decodedResult,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          }
+        }
+      ).then((response) => {
+        setDecodedResults(response.data.stringlify());
+        console.log(response);
+      });
+    } else {
+      setDecodedResults(decodedText);
+    }
   };
 
   return (
@@ -17,7 +37,7 @@ const App = (props) => {
         <Html5QrcodePlugin
           fps={10}
           qrbox={250}
-          disableFlip={false}
+          disableFlip={true}
           qrCodeSuccessCallback={onNewScanResult}
         />
       </section>
