@@ -26,7 +26,7 @@ const App = (props) => {
           headers: headers
         }
       ).then((response) => {
-        setDecodedResults({data: response.data});
+        setDecodedResults({data: response.data.data});
         console.log(response);
       })
         .catch((error) => {
@@ -34,7 +34,7 @@ const App = (props) => {
           console.log(error);
         });
     } else {
-      setDecodedResults(decodedResult);
+      setDecodedResults({data: decodedResult});
     }
   };
 
