@@ -9,7 +9,7 @@ const App = (props) => {
   const queryParams = new URLSearchParams(window.location.search);
   const token = queryParams.get("token");
   const url = queryParams.get("url");
-  const [decodedResults, setDecodedResults] = useState();
+  const [decodedResults, setDecodedResults] = useState('');
   const onNewScanResult = (decodedText, decodedResult) => {
     console.log("App [result]", decodedResult);
     if (url) {
@@ -18,7 +18,7 @@ const App = (props) => {
         { 'Content-Type': 'application/json' };
       axios.post(url,
         {
-          "text": decodedResult.result.text,
+          "text": decodedText,
           "format": decodedResult.result.format.format,
           "format_name": decodedResult.result.format.formatName,
         },
@@ -26,31 +26,31 @@ const App = (props) => {
           headers: headers
         }
       ).then((response) => {
-          setDecodedResults(response.data);
-          console.log(response);
-        })
-  .catch((error) => {
-    setDecodedResults(error.message);
-    console.log(error);
-  });
+        setDecodedResults(response.statusText);
+        console.log(response);
+      })
+        .catch((error) => {
+          setDecodedResults(error.message);
+          console.log(error);
+        });
     } else {
-  setDecodedResults(decodedResult);
-}
+      setDecodedResults(decodedResult);
+    }
   };
 
-return (
-  <div className="App">
-    <section className="App-section">
-      <Html5QrcodePlugin
-        fps={10}
-        qrbox={250}
-        disableFlip={true}
-        qrCodeSuccessCallback={onNewScanResult}
-      />
-    </section>
-    <p>{decodedResults}</p>
-  </div>
-);
+  return (
+    <div className="App">
+      <section className="App-section">
+        <Html5QrcodePlugin
+          fps={10}
+          qrbox={250}
+          disableFlip={true}
+          qrCodeSuccessCallback={onNewScanResult}
+        />
+      </section>
+      <p>{decodedResults}</p>
+    </div>
+  );
 };
 
 export default App;
