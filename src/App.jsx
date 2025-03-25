@@ -17,7 +17,11 @@ const App = (props) => {
         { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token } :
         { 'Content-Type': 'application/json' };
       axios.post(url,
-        decodedResult,
+        {
+          "text": decodedResult.result.text,
+          "format": decodedResult.result.format.format,
+          "format_name": decodedResult.result.format.formatName,
+        },
         {
           headers: headers
         }
