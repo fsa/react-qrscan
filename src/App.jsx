@@ -14,8 +14,6 @@ const App = (props) => {
   return (
     <div className="App">
       <section className="App-section">
-        <div className="App-section-title">Сканер QR-кодов</div>
-        <br />
         <Html5QrcodePlugin
           fps={10}
           qrbox={250}
