@@ -9,7 +9,7 @@ const App = (props) => {
   const queryParams = new URLSearchParams(window.location.search);
   const token = queryParams.get("token");
   const url = queryParams.get("url");
-  const [decodedResults, setDecodedResults] = useState('');
+  const [decodedResults, setDecodedResults] = useState({data: 'Сканируйте код'});
   const onNewScanResult = (decodedText, decodedResult) => {
     console.log("App [result]", decodedResult);
     if (url) {
@@ -26,11 +26,11 @@ const App = (props) => {
           headers: headers
         }
       ).then((response) => {
-        setDecodedResults(response.data);
+        setDecodedResults({data: response.data});
         console.log(response);
       })
         .catch((error) => {
-          setDecodedResults(error.message);
+          setDecodedResults({data: error.message});
           console.log(error);
         });
     } else {
@@ -48,7 +48,7 @@ const App = (props) => {
           qrCodeSuccessCallback={onNewScanResult}
         />
       </section>
-      <p>{decodedResults}</p>
+      <p>{decodedResults['data']}</p>
     </div>
   );
 };
