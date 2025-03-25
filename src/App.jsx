@@ -10,7 +10,7 @@ const App = (props) => {
   const token = queryParams.get("token");
   const url = queryParams.get("url");
   console.log(token, url)
-  const [decodedResults, setDecodedResults] = useState([]);
+  const [decodedResults, setDecodedResults] = useState();
   const onNewScanResult = (decodedText, decodedResult) => {
     console.log("App [result]", decodedResult);
     if (url && token) {
@@ -25,6 +25,10 @@ const App = (props) => {
       ).then((response) => {
         setDecodedResults(response.data);
         console.log(response);
+      })
+      .catch((error) => {
+        setDecodedResults(error.message);
+        console.log(error);
       });
     } else {
       setDecodedResults(decodedResult);
