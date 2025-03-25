@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// @ts-check
 
-function App() {
-  const [count, setCount] = useState(0)
+import React, { useState } from 'react';
+import './App.css';
+import Html5QrcodePlugin from './Html5QrcodePlugin.jsx';
+import ResultContainerPlugin from './ResultContainerPlugin.jsx';
+
+const App = (props) => {
+  const [decodedResults, setDecodedResults] = useState([]);
+  const onNewScanResult = (decodedText, decodedResult) => {
+    console.log("App [result]", decodedResult);
+    setDecodedResults(prev => [...prev, decodedResult]);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="App">
+      <section className="App-section">
+        <div className="App-section-title"> Html5-qrcode React demo</div>
+        <br />
+        <Html5QrcodePlugin
+          fps={10}
+          qrbox={250}
+          disableFlip={false}
+          qrCodeSuccessCallback={onNewScanResult}
+        />
+        <ResultContainerPlugin results={decodedResults} />
+      </section>
+    </div>
+  );
+};
 
-export default App
+export default App;
