@@ -10,7 +10,7 @@ const QrCodeScanner = (props) => {
   const [decodedResults, setDecodedResults] = useState({ data: 'Сканируйте код' });
   const onNewScanResult = (decodedText, decodedResult) => {
     console.log("App [result]", decodedResult);
-    if (last_code == decodedResult) {
+    if (last_code == decodedText) {
       return;
     }
     axios.post('/scan',
@@ -23,8 +23,8 @@ const QrCodeScanner = (props) => {
         headers: { 'Content-Type': 'application/json' }
       }
     ).then((response) => {
-      setDecodedResults({ data: response.data.data });
-      last_code = decodedResult;
+      setDecodedResults(response.data);
+      last_code = decodedText;
     }
     ).catch((error) => {
       setDecodedResults({ data: error.message });
