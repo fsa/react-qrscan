@@ -1,50 +1,50 @@
-import { Html5QrcodeScanner } from 'html5-qrcode';
-import { useEffect } from 'react';
+// @ts-check
 
-const qrCodeRegionId = "html5qr-code-full-region";
-
-// Creates the configuration object for Html5QrcodeScanner.
-const createConfig = (props) => {
-    let config = {};
-    if (props.fps) {
-        config.fps = props.fps;
-    }
-    if (props.qrbox) {
-        config.qrbox = props.qrbox;
-    }
-    if (props.aspectRatio) {
-        config.aspectRatio = props.aspectRatio;
-    }
-    if (props.disableFlip !== undefined) {
-        config.disableFlip = props.disableFlip;
-    }
-    return config;
-};
+import React, { useState } from 'react';
+import './QrCodeScanner.css';
+import Html5QrCodePlugin from './components/Html5QrCodePlugin';
+import axios from 'axios';
 
 const QrCodeScanner = (props) => {
-
-    useEffect(() => {
-        // when component mounts
-        const config = createConfig(props);
-        const verbose = props.verbose === true;
-        // Success callback is required.
-        if (!(props.qrCodeSuccessCallback)) {
-            throw "qrCodeSuccessCallback is required callback.";
-        }
-        const html5QrcodeScanner = new Html5QrcodeScanner(qrCodeRegionId, config, verbose);
-        html5QrcodeScanner.render(props.qrCodeSuccessCallback, props.qrCodeErrorCallback);
-
-        // cleanup function when component will unmount
-        return () => {
-            html5QrcodeScanner.clear().catch(error => {
-                console.error("Failed to clear html5QrcodeScanner. ", error);
-            });
-        };
-    }, []);
-
-    return (
-        <div id={qrCodeRegionId} />
+  let last_code = null;
+  const [decodedResults, setDecodedResults] = useState({ data: 'Сканируйте код' });
+  const onNewScanResult = (decodedText, decodedResult) => {
+    console.log("App [result]", decodedResult);
+    if (last_code == decodedResult) {
+      return;
+    }
+    axios.post('/scan',
+      {
+        "text": decodedText,
+        "format": decodedResult.result.format.format,
+        "format_name": decodedResult.result.format.formatName,
+      },
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
+    ).then((response) => {
+      setDecodedResults({ data: response.data.data });
+      last_code = decodedResult;
+    }
+    ).catch((error) => {
+      setDecodedResults({ data: error.message });
+    }
     );
+  };
+
+  return (
+    <div className="App">
+      <section className="App-section">
+        <Html5QrCodePlugin
+          fps={10}
+          qrbox={250}
+          disableFlip={true}
+          qrCodeSuccessCallback={onNewScanResult}
+        />
+      </section>
+      <p>{decodedResults['data']}</p>
+    </div>
+  );
 };
 
 export default QrCodeScanner;
