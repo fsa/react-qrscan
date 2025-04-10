@@ -1,7 +1,7 @@
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { useEffect } from 'react';
 
-const qrcodeRegionId = "html5qr-code-full-region";
+const qrCodeRegionId = "html5qr-code-full-region";
 
 // Creates the configuration object for Html5QrcodeScanner.
 const createConfig = (props) => {
@@ -21,17 +21,17 @@ const createConfig = (props) => {
     return config;
 };
 
-const Html5QrcodePlugin = (props) => {
+const QrCodeScanner = (props) => {
 
     useEffect(() => {
         // when component mounts
         const config = createConfig(props);
         const verbose = props.verbose === true;
-        // Suceess callback is required.
+        // Success callback is required.
         if (!(props.qrCodeSuccessCallback)) {
             throw "qrCodeSuccessCallback is required callback.";
         }
-        const html5QrcodeScanner = new Html5QrcodeScanner(qrcodeRegionId, config, verbose);
+        const html5QrcodeScanner = new Html5QrcodeScanner(qrCodeRegionId, config, verbose);
         html5QrcodeScanner.render(props.qrCodeSuccessCallback, props.qrCodeErrorCallback);
 
         // cleanup function when component will unmount
@@ -43,8 +43,8 @@ const Html5QrcodePlugin = (props) => {
     }, []);
 
     return (
-        <div id={qrcodeRegionId} />
+        <div id={qrCodeRegionId} />
     );
 };
 
-export default Html5QrcodePlugin;
+export default QrCodeScanner;

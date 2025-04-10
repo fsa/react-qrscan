@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import './App.css';
-import Html5QrcodePlugin from './Html5QrcodePlugin.jsx';
+import QrCodeScanner from './QrCodeScanner.jsx';
 import axios from 'axios';
 
 const App = (props) => {
@@ -13,7 +13,6 @@ const App = (props) => {
     if (last_code == decodedResult) {
       return;
     }
-    last_code = decodedResult;
     axios.post('/scan',
       {
         "text": decodedText,
@@ -25,11 +24,10 @@ const App = (props) => {
       }
     ).then((response) => {
       setDecodedResults({ data: response.data.data });
-      console.log(response);
+      last_code = decodedResult;
     }
     ).catch((error) => {
       setDecodedResults({ data: error.message });
-      console.log(error);
     }
     );
   };
@@ -37,7 +35,7 @@ const App = (props) => {
   return (
     <div className="App">
       <section className="App-section">
-        <Html5QrcodePlugin
+        <QrCodeScanner
           fps={10}
           qrbox={250}
           disableFlip={true}
