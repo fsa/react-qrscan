@@ -59,7 +59,7 @@ const QrCodeScanner = (props) => {
         headers: { 'Content-Type': 'application/json' }
       }
     ).then((response) => {
-      setErrorMessage('');
+      setErrorMessage(codeId + ' ' + editedDescription);
       setEditMode(false);
     }).catch((error) => {
       setErrorMessage(error.message);
