@@ -6,8 +6,7 @@ import Html5QrCodePlugin from './components/Html5QrCodePlugin';
 import axios from 'axios';
 
 const QrCodeScanner = (props) => {
-  let last_code = null;
-  const [decodedResults, setDecodedResults] = useState({ data: 'Сканируйте код' });
+  const [decodedResults, setDecodedResults] = useState('Сканируйте код');
   const [editable, setEditable] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editedDescription, setEditedDescription] = useState('');
@@ -23,14 +22,13 @@ const QrCodeScanner = (props) => {
         headers: { 'Content-Type': 'application/json' }
       }
     ).then((response) => {
-      setDecodedResults(response.data);
-      setEditable(true);
-      setEditedDescription(response.data.data || '');
-      last_code = decodedText;
+      setDecodedResults(response.data.data);
+      setEditable(response.data.editable);
+      setEditedDescription(response.data.description || '');
       setEditMode(false);
     }
     ).catch((error) => {
-      setDecodedResults({ data: error.message });
+      setDecodedResults(error.message);
       setEditable(false);
       setEditMode(false);
     }
@@ -58,13 +56,13 @@ const QrCodeScanner = (props) => {
       setDecodedResults(response.data);
       setEditMode(false);
     }).catch((error) => {
-      setDecodedResults({ data: error.message });
+      setDecodedResults(error.message);
     });
   };
 
   const handleCancelEdit = () => {
     setEditMode(false);
-    setEditedDescription(decodedResults.data || '');
+    setEditedDescription(decodedResults || '');
   };
 
   return (
@@ -92,7 +90,7 @@ const QrCodeScanner = (props) => {
         </div>
       ) : (
         <div className="result-display">
-          <p>{decodedResults['data']}</p>
+          <p>{decodedResults} {editedDescription}</p>
           {editable && (
             <button onClick={handleEditClick}>Редактировать описание</button>
           )}
