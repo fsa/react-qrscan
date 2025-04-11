@@ -77,6 +77,7 @@ const QrCodeScanner = (props) => {
       </section>
       {editMode ? (
         <div className="edit-form">
+          <p>{decodedResults}</p>
           <textarea
             value={editedDescription}
             onChange={handleDescriptionChange}
@@ -90,7 +91,8 @@ const QrCodeScanner = (props) => {
         </div>
       ) : (
         <div className="result-display">
-          <p>{decodedResults} {editedDescription}</p>
+          <p>{decodedResults}</p>
+          <p>{editedDescription}</p>
           {editable && (
             <button onClick={handleEditClick}>Редактировать описание</button>
           )}
