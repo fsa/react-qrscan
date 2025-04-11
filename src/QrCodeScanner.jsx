@@ -6,12 +6,15 @@ import Html5QrCodePlugin from './components/Html5QrCodePlugin';
 import axios from 'axios';
 
 const QrCodeScanner = (props) => {
+  let codeId = null;
   const [decodedResults, setDecodedResults] = useState('Сканируйте код');
   const [editable, setEditable] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editedDescription, setEditedDescription] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const onNewScanResult = (decodedText, decodedResult) => {
+    setErrorMessage('Отправка кода на сервер...')
     axios.post('/scan',
       {
         "text": decodedText,
@@ -22,13 +25,15 @@ const QrCodeScanner = (props) => {
         headers: { 'Content-Type': 'application/json' }
       }
     ).then((response) => {
+      setErrorMessage('');
+      codeId = response.data.id;
       setDecodedResults(response.data.data);
       setEditable(response.data.editable);
       setEditedDescription(response.data.description || '');
       setEditMode(false);
     }
     ).catch((error) => {
-      setDecodedResults(error.message);
+      setErrorMessage(error.message);
       setEditable(false);
       setEditMode(false);
     }
@@ -44,19 +49,20 @@ const QrCodeScanner = (props) => {
   };
 
   const handleSaveDescription = () => {
+    setErrorMessage('Сохраняем описание кода...');
     axios.post('/scan/update-description',
       {
-        id: null,
-        new_description: editedDescription
+        id: codeId,
+        description: editedDescription
       },
       {
         headers: { 'Content-Type': 'application/json' }
       }
     ).then((response) => {
-      setDecodedResults(response.data);
+      setErrorMessage('');
       setEditMode(false);
     }).catch((error) => {
-      setDecodedResults(error.message);
+      setErrorMessage(error.message);
     });
   };
 
@@ -67,6 +73,7 @@ const QrCodeScanner = (props) => {
 
   return (
     <div className="App">
+      <div>{errorMessage}</div>
       <section className="App-section">
         <Html5QrCodePlugin
           fps={10}
