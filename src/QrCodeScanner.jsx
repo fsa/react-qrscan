@@ -13,9 +13,6 @@ const QrCodeScanner = (props) => {
   const [editedDescription, setEditedDescription] = useState('');
 
   const onNewScanResult = (decodedText, decodedResult) => {
-    if (last_code == decodedText) {
-      return;
-    }
     axios.post('/scan',
       {
         "text": decodedText,
