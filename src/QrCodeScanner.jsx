@@ -6,10 +6,10 @@ import Html5QrCodePlugin from './components/Html5QrCodePlugin';
 import axios from 'axios';
 
 const QrCodeScanner = (props) => {
-  let codeId = null;
   const [decodedResults, setDecodedResults] = useState('Сканируйте код');
   const [editable, setEditable] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [codeId, setCodeId] = useState(null);
   const [editedDescription, setEditedDescription] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -26,7 +26,7 @@ const QrCodeScanner = (props) => {
       }
     ).then((response) => {
       setErrorMessage('');
-      codeId = response.data.id;
+      setCodeId(response.data.id);
       setDecodedResults(response.data.data);
       setEditable(response.data.editable);
       setEditedDescription(response.data.description || '');
