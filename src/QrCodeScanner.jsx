@@ -49,7 +49,11 @@ const QrCodeScanner = (props) => {
   };
 
   const handleSaveDescription = () => {
-    setErrorMessage('Сохраняем описание кода...');
+    //setErrorMessage('Сохраняем описание кода...');
+    setErrorMessage(JSON.stringify({
+      id: codeId,
+      description: editedDescription
+    }));
     axios.post('/scan/update-description',
       {
         id: codeId,
@@ -59,10 +63,10 @@ const QrCodeScanner = (props) => {
         headers: { 'Content-Type': 'application/json' }
       }
     ).then((response) => {
-      setErrorMessage(codeId + ' ' + editedDescription);
+      setErrorMessage('');
       setEditMode(false);
     }).catch((error) => {
-      setErrorMessage(error.message);
+      //setErrorMessage(error.message);
     });
   };
 
