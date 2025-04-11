@@ -27,7 +27,7 @@ const QrCodeScanner = (props) => {
       setEditable(true);
       setEditedDescription(response.data.data || '');
       last_code = decodedText;
-      setEditMode(true);
+      setEditMode(false);
     }
     ).catch((error) => {
       setDecodedResults({ data: error.message });
