@@ -27,10 +27,10 @@ const QrCodeScanner = (props) => {
       }
     ).then((response) => {
       setDecodedResults(response.data);
-      setEditable(response.data.can_edit || true); // предполагаем, что сервер возвращает can_edit: true/false
+      setEditable(true);
       setEditedDescription(response.data.data || '');
       last_code = decodedText;
-      setEditMode(false);
+      setEditMode(true);
     }
     ).catch((error) => {
       setDecodedResults({ data: error.message });
