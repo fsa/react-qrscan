@@ -103,7 +103,12 @@ const QrCodeScanner = (props) => {
     <div className="App">
       <div>{errorMessage}</div>
       <section className="App-section">
-        <Scanner onScan={onScanResult} />
+        <Html5QrCodePlugin
+          fps={10}
+          qrbox={250}
+          disableFlip={true}
+          qrCodeSuccessCallback={onNewScanResult}
+        />
       </section>
       {editMode ? (
         <div className="edit-form">

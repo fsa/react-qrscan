@@ -27,3 +27,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+
+p.edit-form {
+  overflow: auto;
+}
