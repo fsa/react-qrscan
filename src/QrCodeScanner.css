@@ -44,4 +44,5 @@
 
 .result-display p {
   overflow-x: auto;
+  width: 300px;
 }
